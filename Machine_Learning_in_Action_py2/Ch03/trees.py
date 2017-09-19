@@ -1,10 +1,7 @@
-'''
-Created on Oct 12, 2010
-Decision Tree Source Code for Machine Learning in Action Ch. 3
-@author: Peter Harrington
-'''
-from math import log
-import operator
+
+from __future__ import print_function
+import numpy as np
+import math
 
 def createDataSet():
     dataSet = [[1, 1, 'yes'],
@@ -16,19 +13,20 @@ def createDataSet():
     #change to discrete values
     return dataSet, labels
 
+
 def calcShannonEnt(dataSet):
     numEntries = len(dataSet)
     labelCounts = {}
     for featVec in dataSet: #the the number of unique elements and their occurance
         currentLabel = featVec[-1]
-        if currentLabel not in labelCounts.keys(): labelCounts[currentLabel] = 0
-        labelCounts[currentLabel] += 1
+        labelCounts[currentLabel] = labelCounts.get(currentLabel, 0) + 1
     shannonEnt = 0.0
     for key in labelCounts:
         prob = float(labelCounts[key])/numEntries
-        shannonEnt -= prob * log(prob,2) #log base 2
+        shannonEnt -= prob * math.log(prob,2) #log base 2
     return shannonEnt
-    
+
+
 def splitDataSet(dataSet, axis, value):
     retDataSet = []
     for featVec in dataSet:
@@ -37,13 +35,15 @@ def splitDataSet(dataSet, axis, value):
             reducedFeatVec.extend(featVec[axis+1:])
             retDataSet.append(reducedFeatVec)
     return retDataSet
-    
+
+
 def chooseBestFeatureToSplit(dataSet):
-    numFeatures = len(dataSet[0]) - 1      #the last column is used for the labels
-    baseEntropy = calcShannonEnt(dataSet)
-    bestInfoGain = 0.0; bestFeature = -1
-    for i in range(numFeatures):        #iterate over all the features
-        featList = [example[i] for example in dataSet]#create a list of all the examples of this feature
+    numFeatures = len(dataSet[0]) - 1     #the last column is used for the labels
+    baseEntropy = calcShannonEnt(dataSet) 
+    bestInfoGain = 0.0; bestFeature = -1  
+    for i in range(numFeatures):          # iterate over all the features
+        #create a list of all the examples of this feature
+        featList = [example[i] for example in dataSet] 
         uniqueVals = set(featList)       #get a set of unique values
         newEntropy = 0.0
         for value in uniqueVals:
@@ -54,7 +54,7 @@ def chooseBestFeatureToSplit(dataSet):
         if (infoGain > bestInfoGain):       #compare this to the best gain so far
             bestInfoGain = infoGain         #if better than current best, set to best
             bestFeature = i
-    return bestFeature                      #returns an integer
+    return bestFeature 
 
 def majorityCnt(classList):
     classCount={}
@@ -62,6 +62,7 @@ def majorityCnt(classList):
         if vote not in classCount.keys(): classCount[vote] = 0
         classCount[vote] += 1
     sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
+    print("majorityCnt  ",sortedClassCount)
     return sortedClassCount[0][0]
 
 def createTree(dataSet,labels):
@@ -79,8 +80,9 @@ def createTree(dataSet,labels):
     for value in uniqueVals:
         subLabels = labels[:]       #copy all of labels, so trees don't mess up existing labels
         myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value),subLabels)
-    return myTree                            
-    
+    return myTree   
+
+
 def classify(inputTree,featLabels,testVec):
     firstStr = inputTree.keys()[0]
     secondDict = inputTree[firstStr]
@@ -103,3 +105,6 @@ def grabTree(filename):
     fr = open(filename)
     return pickle.load(fr)
     
+
+
+
