@@ -6,3 +6,5 @@
 - Ch02. k Nearest Neighbors (kNN)
 - Ch03. Decision trees
 - Ch04. Classifying with probability theory naive Bayes
+- Ch08. Linear Regression
+- Ch05. Logistic Regression
