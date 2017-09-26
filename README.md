@@ -8,3 +8,6 @@
 - Ch04. Classifying with probability theory naive Bayes
 - Ch08. Linear Regression
 - Ch05. Logistic Regression
+
+- In MLiA_py3/DeepLearning
+	- Study Neural Network 
