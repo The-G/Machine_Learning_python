@@ -10,4 +10,6 @@
 - Ch05. Logistic Regression
 
 - In MLiA_py3/DeepLearning
-	- Study Neural Network 
+	- ch03 Perceptron 
+	- ch04 Learning Neural Network
+	- ch05 Backpropagation
